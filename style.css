@@ -1,0 +1,30 @@
+*{
+    padding: 0px;
+    font-size: 18px;
+}
+
+p{
+    margin: 0px;
+}
+
+div.display{
+    border: 2px solid black;
+    height: 4em;
+}
+
+div.display > p{
+    text-align: right;
+}
+
+#current{
+    font-size: 2em;
+}
+
+div.buttons{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.buttons > button{
+    height: 3em;
+}
