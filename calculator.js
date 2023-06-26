@@ -26,9 +26,9 @@ function flushSecondary(content){
 }
 
 function flushDisplay(){
-    if(rawNumber.length) flushPrimary(rawNumber.join(''));
+    if(rawNumber.length) flushPrimary((sign == -1 ? '-' : '') + rawNumber.join(''));
     else if(number == null) flushPrimary('');
-    else flushPrimary(number);
+    else flushPrimary(sign*number);
     if(operand == null) flushSecondary('');
     else flushSecondary(operand + ' ' + operator);
 }
@@ -36,6 +36,8 @@ function flushDisplay(){
 
 function evaluate(){
     console.log(`evaluate ${operand} & ${number}`)
+    number *= sign;
+    sign = 1;
     switch(operator){
         case '+':
             return operand + number;
@@ -73,11 +75,13 @@ function handleInputNumber(e){
 function handleOperations(e){
     let currentOperator = e.target.textContent;
     if(operator == ' '){
-        operand = number;
+        if(number == null) return;
+        operand = number * sign;
+        sign = 1;
         number = null;
         rawNumber = [];
     }
-    else if(number != null){
+    else if(number !== null){
         operand = evaluate();
         number = null;
         rawNumber = [];
@@ -111,8 +115,17 @@ function handleDelete(){
     if(!rawNumber.length) return;
     rawNumber.pop();
     number = parseFloat(rawNumber.join(''));
-    if(Number.isNaN(number)) number = null;
+    if(Number.isNaN(number)){
+        number = null;
+        sign = 1;
+    }
     console.log(number);
+    flushDisplay();
+}
+
+function handleSign(){
+    if(number == null) return;
+    sign *= -1;
     flushDisplay();
 }
 
@@ -140,3 +153,6 @@ clearButton.addEventListener('click', () => {
 
 const deleteButton = document.querySelector('#delete');
 deleteButton.addEventListener('click', handleDelete);
+
+const signButton = document.querySelector('#sign');
+signButton.addEventListener('click', handleSign);
