@@ -7,24 +7,63 @@ p{
     margin: 0px;
 }
 
+div.main-calculator{
+    max-width: 25em;
+    margin: 5px auto;
+    padding: 2em;
+    border-radius: 1em;
+    border: solid black 5px;
+    background-color: rgb(84, 89, 58);
+}
+
 div.display{
-    border: 2px solid black;
-    height: 4em;
+    border: 0.1em solid black;
+    height: 5em;
+    border-radius: 1.2em;
+    padding: 0.5em;
+    background-color: khaki;
 }
 
 div.display > p{
     text-align: right;
 }
 
-#current{
-    font-size: 2em;
+p#previous{
+    margin-top: 0.2em;
+    /* border: solid red 2px; */
+    font-size: 1.2em;
+    height: 1.2em;
+}
+
+
+p#current{
+    font-size: 2.5em;
 }
 
 div.buttons{
+    margin-top: 2em;
     display: grid;
+    gap: 1em;
     grid-template-columns: repeat(4, 1fr);
 }
 
 .buttons > button{
+    border-style: solid;
+    border-color: black;
+    border-width: 0.05em;
+    border-radius: 0.9em;
     height: 3em;
+    text-decoration: none;
+}
+
+button.numbers, button.modifiers{
+    background-color: khaki;
+}
+
+button.operations, button.functions{
+    background-color: darkkhaki;
+}
+
+button#equal{
+    background-color: rgb(126, 135, 65);
 }
