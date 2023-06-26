@@ -12,7 +12,7 @@ div.main-calculator{
     margin: 5px auto;
     padding: 2em;
     border-radius: 1em;
-    border: solid black 5px;
+    border: solid black 0.1em;
     background-color: rgb(84, 89, 58);
 }
 

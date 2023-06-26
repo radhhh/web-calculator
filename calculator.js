@@ -27,7 +27,7 @@ function flushSecondary(content){
 
 function flushDisplay(){
     if(rawNumber.length) flushPrimary((sign == -1 ? '-' : '') + rawNumber.join(''));
-    else if(number == null) flushPrimary('');
+    else if(number == null) flushPrimary(sign == -1 ? '-' : '');
     else flushPrimary(sign*number);
     if(operand == null) flushSecondary('');
     else flushSecondary(operand + ' ' + operator);
@@ -60,8 +60,7 @@ function handleException(){
 }
                     
                     
-function handleInputNumber(e){
-    let inputChar = e.target.textContent;
+function handleInputNumber(inputChar){
     if(rawNumber.length >= MAXINPUT) return;
     if(rawNumber.length == 1 && rawNumber[0] == '0'){
         if(inputChar == '0') return;
@@ -72,8 +71,7 @@ function handleInputNumber(e){
     flushDisplay();
 }
 
-function handleOperations(e){
-    let currentOperator = e.target.textContent;
+function handleOperations(currentOperator){
     if(operator == ' '){
         if(number == null) return;
         operand = number * sign;
@@ -112,31 +110,34 @@ function handleDecimal(){
 }
 
 function handleDelete(){
-    if(!rawNumber.length) return;
+    if(!rawNumber.length){
+        number = null;
+        sign = 1;
+        flushDisplay();
+        return;
+    }
     rawNumber.pop();
     number = parseFloat(rawNumber.join(''));
     if(Number.isNaN(number)){
         number = null;
-        sign = 1;
     }
     console.log(number);
     flushDisplay();
 }
 
 function handleSign(){
-    if(number == null) return;
     sign *= -1;
     flushDisplay();
 }
 
 const numberButtons = document.querySelectorAll('.numbers');
 numberButtons.forEach((currentButton) => {
-    currentButton.addEventListener('click', handleInputNumber);
+    currentButton.addEventListener('click', (e) => handleInputNumber(e.target.textContent));
 });
 
 const operationButtons = document.querySelectorAll('.operations');
 operationButtons.forEach((currentButton) => {
-    currentButton.addEventListener('click', handleOperations);
+    currentButton.addEventListener('click', (e) => handleOperations(e.target.textContent));
 })
 
 const equalButton = document.querySelector('#equal')
@@ -156,3 +157,44 @@ deleteButton.addEventListener('click', handleDelete);
 
 const signButton = document.querySelector('#sign');
 signButton.addEventListener('click', handleSign);
+
+document.addEventListener("keydown", (event) => {
+    console.log(event.key);
+    if('0' <= event.key && event.key <= '9'){
+        handleInputNumber(event.key);
+        return;
+    }
+    switch (event.key){
+        case '/':
+            handleOperations('/');
+            event.preventDefault();
+            break;
+        case 'x':
+        case '*': 
+            handleOperations('x');
+            break;
+        case '+':
+            handleOperations('+');
+            break;
+        case '-':
+            handleOperations('-');
+            break;
+        case '^':
+            handleOperations('^');
+            break;
+        case 'Backspace':
+            handleDelete();
+            break;
+        case 'c':
+            resetValue();
+            flushDisplay();
+            break;
+        case '=':
+        case 'Enter':
+            handleEqual();
+            break;
+        case '.':
+            handleDecimal();
+            break;
+    }
+})
